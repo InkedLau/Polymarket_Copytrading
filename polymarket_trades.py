@@ -157,7 +157,7 @@ def get_client():
 def place_market_order(token_id, side, usd_amount, max_retries=3):
     """Place un ordre market FOK"""
     from py_clob_client.clob_types import MarketOrderArgs, OrderType
-    from py_clob_client.constants import BUY, SELL
+    from py_clob_client.order_builder.constants import BUY, SELL
     
     order_side = BUY if side == "BUY" else SELL
     
