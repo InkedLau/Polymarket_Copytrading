@@ -1,22 +1,12 @@
 # ============ COPYTRADING CONFIG ============
 
 # Mode: "debug" (simulation) ou "live" (ordres réels)
-MODE = "debug"
+MODE = "live"
 
-# Usernames à copier (sans le @)
-TARGET_USERS = [
-    # "scottilicious",
-    "gabagool22",
+# Wallets à copier: (wallet, montant_alloué)
+TARGET_WALLETS = [
+    ("0x000d257d2dc7616feaef4ae0f14600fdf50a758e", 1000),
 ]
-
-# Capital initial (simulation)
-INITIAL_CAPITAL = 1000.0
-
-# Sizing
-SIZING_MODE = "fixed"  # "fixed", "percent_of_trade", "percent_of_portfolio"
-FIXED_SIZE = 10.0
-PERCENT_OF_TRADE = 0.1
-PERCENT_OF_PORTFOLIO = 0.02
 
 # Exécution
 MAX_SLIPPAGE = 0.05  # 5% max, sinon skip

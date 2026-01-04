@@ -5,6 +5,15 @@ Récupère les infos d'un profil et ses trades récents
 import requests
 from datetime import datetime
 
+# ------ CONFIG ------
+
+# USERNAME = 'scottilicious'
+USERNAME = 'gabagool22'
+
+# --------------------
+
+
+
 BASE_GAMMA = "https://gamma-api.polymarket.com"
 BASE_DATA = "https://data-api.polymarket.com"
 
@@ -72,8 +81,7 @@ def format_timestamp(ts: int) -> str:
 
 
 def main():
-    username = "gabagool22" # "scottilicious"
-    # https://polymarket.com/@gabagool22?tab=activity
+    username = USERNAME
     
     # 1. Recherche du profil
     print(f"[1] Recherche du profil @{username}...")

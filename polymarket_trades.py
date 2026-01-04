@@ -58,6 +58,27 @@ def resolve_users(usernames):
     return resolved
 
 
+def resolve_wallets(wallets):
+    """Résout une liste de wallets. Retourne {wallet: display_name}"""
+    resolved = {}
+    for wallet in wallets:
+        wallet = wallet.lower()
+        try:
+            r = requests.get(f"{GAMMA_URL}/public-profile", params={"address": wallet}, timeout=10)
+            if r.status_code == 200:
+                p = r.json()
+                name = p.get("name") or p.get("pseudonym") or wallet[:12]
+                resolved[wallet] = name
+                print(f"  ✅ {wallet[:12]}... → @{name}")
+            else:
+                resolved[wallet] = wallet[:12]
+                print(f"  ⚠️ {wallet[:12]}... (no profile)")
+        except:
+            resolved[wallet] = wallet[:12]
+            print(f"  ⚠️ {wallet[:12]}... (error)")
+    return resolved
+
+
 # ============ PRIX ============
 
 def get_price(token_id):
@@ -130,6 +151,26 @@ def get_positions(wallet):
     except:
         pass
     return []
+
+
+def get_wallet_value(wallet):
+    """Calcule la valeur totale d'un wallet (positions + USDC on-chain)"""
+    wallet = wallet.lower()
+    # Positions Polymarket
+    try:
+        r = requests.get(f"{DATA_API_URL}/positions", params={"user": wallet, "sizeThreshold": 0.01}, timeout=10)
+        positions_value = sum(float(p.get("currentValue", 0)) for p in r.json()) if r.status_code == 200 else 0
+    except:
+        positions_value = 0
+    # USDC on-chain
+    try:
+        usdc_contract = "0x2791bca1f2de4661ed88a30c99a7a9449aa84174"
+        data = "0x70a08231" + wallet[2:].zfill(64)
+        r = requests.post("https://polygon-rpc.com", json={"jsonrpc": "2.0", "method": "eth_call", "params": [{"to": usdc_contract, "data": data}, "latest"], "id": 1}, timeout=10)
+        usdc_balance = int(r.json().get("result", "0x0"), 16) / 1e6
+    except:
+        usdc_balance = 0
+    return positions_value + usdc_balance
 
 
 # ============ ORDRES LIVE ============
